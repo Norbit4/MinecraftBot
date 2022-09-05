@@ -35,11 +35,13 @@ async function sendMessage(message){
 }
 
 
-const createBot = function(userId, index, botprefix) {
+const createBot = function(botSettings) {
+
+  const {userId, index, botPrefix, host} = botSettings
   
   const bot = mineflayer.createBot({
-    host: 'localhost',
-    username: botprefix + index, 
+    host: host,
+    username: botPrefix + index, 
   })
 
   const start = (userId) => {
@@ -77,7 +79,7 @@ const createBot = function(userId, index, botprefix) {
 async function connectBots (connectSettings){
   var i = 0;
 
-  var {userId, botAmout, interval, botPrefix, channel} = connectSettings 
+  var {userId, botAmout, interval, botPrefix, channel, host} = connectSettings 
 
   if(interval == undefined) interval = 600;
 
@@ -99,7 +101,14 @@ async function connectBots (connectSettings){
       botIntervalList.push(userId)
     }
 
-    createBot(userId, i, botPrefix)
+    var botSettings ={
+      host,
+      userId,
+      index: i,
+      botPrefix
+    }
+
+    createBot(botSettings)
 
     i++
 

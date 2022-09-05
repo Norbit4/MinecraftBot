@@ -1,7 +1,7 @@
 const { connectBots, sendMessage, disconnect } = require('./mcbot.js');
 const { EmbedBuilder } = require('discord.js');
 
-function listner(client){
+function listener(client){
     client.on('interactionCreate', async interaction => {
         if (!interaction.isCommand()) return;
         
@@ -12,16 +12,18 @@ function listner(client){
     
         if(commandName === 'start'){
         
+            let host = options.getString('host')
             let amount = options.getInteger('amount')
             let interval = options.getInteger('interval')
             let botPrefix = options.getString('prefix')
 
             var connectSettings = {
-                userId: userId,
-                amount: amount,
-                interval: interval,
-                botPrefix: botPrefix,
-                channel: channel
+                host,
+                userId,
+                amount,
+                interval,
+                botPrefix,
+                channel
             }
 
             connectBots(connectSettings)
@@ -47,12 +49,11 @@ function listner(client){
             const text = options.getString('message') 
 
             var message = {
-                userId: userId,
+                userId,
                 messageType: 'CHAT',
-                text: text
+                text
             }
 
-            //var result = await sendMessage(userId, 'CHAT', message)
             var result = await sendMessage(message)
         
             if(result){ 
@@ -75,5 +76,5 @@ function listner(client){
 }
 
 module.exports = {
-    listner: listner
+    listener: listener
   }

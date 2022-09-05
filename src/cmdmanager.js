@@ -6,6 +6,12 @@ function register(commands) {
         options: 
         [
             {
+                name: 'host',
+                description: 'server ip',
+                required: true,
+                type: 3
+            },
+            {
                 name: 'amount',
                 description: 'amount of bots',
                 required: true,

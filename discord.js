@@ -1,17 +1,18 @@
 const { Client, GatewayIntentBits } = require('discord.js');
-const { register } = require('./cmdmanager.js');
-const { listner } = require('./cmdlistener.js');
+const { register } = require('./src/cmdmanager.js');
+const { listener } = require('./src/cmdlistener.js');
+let jsonData = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-const token = 'MTAxNTMxMDA0Mzc0NDMxMzQwNA.GDqBwB.DQAgfreKNISwyu3FsVTwbGr1trhFujI7eTt2Es'
+var { token, status } = jsonData
 
 client.on('ready', () => {
-  client.user.setActivity("test"); 
+  client.user.setActivity(status) 
 });
 
 client.on('ready', () => {
 
-  console.log('I am ready!');
+  console.log('[Bot] I am ready!');
 
   const guildID = '878983281549406248'
   const guild = client.guilds.cache.get(guildID)
@@ -25,6 +26,6 @@ client.on('ready', () => {
   }  
 })
 
-listner(client)
+listener(client)
 
 client.login(token)
