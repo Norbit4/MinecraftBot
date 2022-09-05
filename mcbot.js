@@ -1,95 +1,143 @@
 const mineflayer = require('mineflayer')
-
-const prefix = 'bot'
-
-var message = {
-  openChannel: false,
-  messageType: '',
-  text: ''
-}
+const { EmbedBuilder } = require('discord.js');
 
 const userMap = new Map()
+const botIntervalList = []
 
 const sleep = (ms) => {
   return new Promise((resolve, reject) => setTimeout(resolve, ms));
 }
 
-async function sendMessage(userId, messageType, text) {
+async function disconnect(userId){
+  userMap.get(userId).disconnected = true
+}
 
-  var userMessage = userMap.get(userId)
+async function sendMessage(message){ 
+
+  const { userId, messageType, text } = message
+
+  var userMessage = userMap.get(userId);
+
+  const {connected} = userMessage
+
+  if(connected == false && messageType === 'CHAT') return false
 
   userMessage.openChannel = true
 
   userMessage.messageType = messageType
   userMessage.text = text
+
   await sleep(100)
 
-  userMessage.openChannel = false
+  userMessage.openChannel  = false
+
+  return true
 }
 
 
-const createBot = function(userId, index) {
+const createBot = function(userId, index, botprefix) {
   
   const bot = mineflayer.createBot({
     host: 'localhost',
-    username: prefix + index, 
-    password: ''
+    username: botprefix + index, 
   })
 
-  const start = () => {
+  const start = (userId) => {
 
     var id = setInterval(() => {
       var userMessage = userMap.get(userId)
 
-      if(userMessage.openChannel) {
+      if(userMessage == undefined) return 
 
-        switch(userMessage.messageType){      
-          case 'QUIT':
-            bot.quit()
-            clearInterval(id)
-            break;
+      const { openChannel, messageType, text, disconnected } = userMessage
+
+      if(disconnected) {
+        bot.quit()
+        arrayRemove(botIntervalList, userId)
+        clearInterval(id)
+      }
+
+      if(openChannel) {
+        switch(messageType){             
           case 'CHAT':
-            bot.chat(userMessage.text)
-            break;
+            bot.chat(text)  
+          break;
+        
           default:
-            console.log('[ERROR] wrong message type!')
-            break;
+          console.log('[ERROR] wrong message type!')
+          break;
         }
       }
     }, 100)
   }
   
-  bot.once('spawn', start)
+  bot.once('spawn',() => start(userId))
 }
 
-function connectBots(userId, botAmout, interval){
+async function connectBots (connectSettings){
   var i = 0;
-  userMap.set(userId, 
-    {
-    openChannel: false, 
-    message: message,
-    messageType: ''
-    }
-  )
 
-  if(interval == undefined) interval = 500;
+  var {userId, botAmout, interval, botPrefix, channel} = connectSettings 
+
+  if(interval == undefined) interval = 600;
 
   if (botAmout == undefined) botAmout = 5;
 
+  userMap.set(userId, 
+    {
+      openChannel: false, 
+      message: '',
+      messageType: '',
+      connected: false,
+      disconnected: false
+    }
+  )
+
   var id = setInterval(() => {
 
-    createBot(userId, i)
+    if(i == 0){
+      botIntervalList.push(userId)
+    }
+
+    createBot(userId, i, botPrefix)
 
     i++
 
     if(i == botAmout) {
+      userMap.get(userId).connected = true
+      arrayRemove(botIntervalList, userId)
+
+      const embed = new EmbedBuilder()
+
+      embed.setTitle(':white_check_mark: Done!')
+      embed.setDescription(`Started!`)
+      embed.setColor('#00ff00')
+
+      channel.send({ embeds: [embed] })
+
       clearInterval(id)
       return true
+
+    }else if(!botIntervalList.includes(userId)){
+      console.log('stopped')
+
+      clearInterval(id)
+      return false
     }
   }, interval)
 }
 
+function arrayRemove(arr, value) { 
+    
+  if(arr.includes(value)){
+    arr.forEach((item, index) => {
+      if(item === value) arr.splice(index,1);
+    })
+  }
+}
+
 module.exports = {
   connectBots: connectBots,
-  sendMessage: sendMessage
+  sendMessage: sendMessage,
+  disconnect: disconnect
 }
