@@ -43,17 +43,17 @@ Commands:
 
 - *start cmd:*
 
-<a href="https://github.com/Norbit4/" target="_blank" rel="noreferrer">
+<a href="https://github.com/Norbit4/MinecraftBot" target="_blank" rel="noreferrer">
 <img src="https://user-images.githubusercontent.com/46154743/188951297-253b71cc-f48d-4ec6-8efd-69a75a9ae2be.gif" width="600"/></a> 
 
 #
 - *message cmd:*
 
-<a href="https://github.com/Norbit4/" target="_blank" rel="noreferrer">
+<a href="https://github.com/Norbit4/MinecraftBot" target="_blank" rel="noreferrer">
 <img src="https://user-images.githubusercontent.com/46154743/188951933-605cfcf2-7d3e-4649-bcb5-33ed0adcb3f2.gif" width="600"/></a> 
 
 #
 - *stop cmd:*
 
-<a href="https://github.com/Norbit4/" target="_blank" rel="noreferrer">
+<a href="https://github.com/Norbit4/MinecraftBot" target="_blank" rel="noreferrer">
 <img src="https://user-images.githubusercontent.com/46154743/188952041-17ac9a42-ada1-47ba-aee1-7f1c31837718.gif" width="600"/></a> 
