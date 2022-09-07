@@ -1,4 +1,4 @@
-# minecraftbot
+# MinecraftBot
 
 Bots were created to test plugins and servers without help of players
 
