@@ -38,7 +38,7 @@ function listener(client){
     
             var result = await disconnect(userId)
 
-            embed.setTitle(':white_check_mark: Stoped!')
+            embed.setTitle(':octagonal_sign: Stoped!')
             embed.setDescription(`Stoped all bots!`)
             embed.setColor('#db1f13')
 
@@ -66,7 +66,7 @@ function listener(client){
                 return
             }
 
-            embed.setTitle(':negative_squared_cross_mark: Error')
+            embed.setTitle(':warning: Error')
             embed.setDescription(`Bots are loading ... try again later`)
             embed.setColor('#db1f13')
             
