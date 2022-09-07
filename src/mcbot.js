@@ -79,11 +79,11 @@ const createBot = function(botSettings) {
 async function connectBots (connectSettings){
   var i = 0;
 
-  var {userId, botAmout, interval, botPrefix, channel, host} = connectSettings 
+  var {userId, amount, interval, botPrefix, channel, host} = connectSettings 
 
   if(interval == undefined) interval = 600;
 
-  if (botAmout == undefined) botAmout = 5;
+  if (amount == undefined) amount = 5;
 
   userMap.set(userId, 
     {
@@ -112,7 +112,7 @@ async function connectBots (connectSettings){
 
     i++
 
-    if(i == botAmout) {
+    if(i == amount) {
       userMap.get(userId).connected = true
       arrayRemove(botIntervalList, userId)
 
